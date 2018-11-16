@@ -1,0 +1,94 @@
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous">
+</script>
+<link
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+  crossorigin="anonymous">
+<script
+  src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+  integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+  crossorigin="anonymous">
+</script>
+
+<script>
+    $(document).ready(function() {
+      $("#success-alert").hide();
+      getAllItems();
+
+      $("#feedbackForm").submit(function(e){
+        e.preventDefault();
+        let fdata = {}
+        fdata["name"] = $("#name").val();
+        fdata["feedback"] = $("#feedback").val();
+        $.ajax({
+            cache: false,
+            url : "/Prod/api/feedback",
+            type: "POST",
+            dataType : "json",
+            data : JSON.stringify(fdata),
+            success : function(callback){
+            	$("#lists").empty();
+            	getAllItems();
+            	$("#success-alert").alert();
+                $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+                  $("#success-alert").slideUp(500);
+                });
+            },
+            error : function(){
+                alert("Error to save data");
+            }
+        });
+      });
+    });
+    
+    function getAllItems() {
+      $.ajax({
+        url: "/Prod/api/feedback"
+      })
+      .done(function(json) {
+    	  $.each(json, function(i) {
+    		  insertListItem(json[i]);
+        });
+      });
+    }
+    function insertListItem(i) {
+      let data = JSON.parse(i.data);
+      let newItem = '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">' +
+    	  '<div class="d-flex w-100 justify-content-between">' +
+          '<h5 class="mb-1" style="margin:0 auto;">Name: ' + data.name + '</h5>' + 
+          '<small>Time: ' + i.ts + '</small>' +
+          '</div>' +
+          '<p class="mb-1">Feedback: ' + data.feedback + '</p></a>';
+      $("#lists").prepend(newItem);
+    }
+    
+</script>
+<div class="jumbotron"
+        style="background-image: url(https://github.com/awslabs/serverless-application-model/blob/master/aws_sam_introduction.png?raw=true);
+        background-size: auto 100%;">
+  </div>
+  <div class="container">
+    <div style="text-align: center;">
+        <h3>Hope you enjoying programming with AWS Lambda! Please share your feedback or any random thoughts.</h3>
+    </div>
+
+    <form action="/Prod/feedback" method="post" id="feedbackForm">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input class="form-control" id="name">
+      </div>
+      <div class="form-group">
+        <label for="feedback">Your feedback or any random thoughts here:</label>
+        <input class="form-control" id="feedback">
+      </div>
+      <div class="alert alert-success" id="success-alert">
+        <strong>Success!</strong> Thank you!
+      </div>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+    <p></p>
+    <div class="list-group" id="lists"></div>
+</div>

@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+
+Resources:
+  SinatraFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: SinatraApp
+      Handler: lambda.handler
+      Runtime: ruby2.5
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref FeedbackTable
+      CodeUri: "./"
+      MemorySize: 512
+      Timeout: 30
+      Events:
+        SinatraApi:
+            Type: Api
+            Properties:
+                Path: /
+                Method: ANY
+                RestApiId: !Ref SinatraAPI
+  SinatraAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: SinatraAPI
+      StageName: Prod
+      DefinitionBody:
+        swagger: '2.0'
+        basePath: '/Prod'
+        info:
+          title: !Ref AWS::StackName
+        paths:
+          /{proxy+}:
+            x-amazon-apigateway-any-method:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri:
+                  !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SinatraFunction.Arn}/invocations'
+                passthroughBehavior: "when_no_match"
+                httpMethod: POST
+                type: "aws_proxy"
+          /:
+            get:
+              responses: {}
+              x-amazon-apigateway-integration:
+                uri:
+                  !Sub 'arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${SinatraFunction.Arn}/invocations'
+                passthroughBehavior: "when_no_match"
+                httpMethod: POST
+                type: "aws_proxy"
+  ConfigLambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    DependsOn:
+    - SinatraFunction
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref SinatraFunction
+      Principal: apigateway.amazonaws.com
+  FeedbackTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: FeedbackServerlessSinatraTable
+      PrimaryKey: 
+        Name: id
+        Type: String
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+Outputs:
+  SinatraAppUrl:
+    Description: App endpoint URL
+    Value: !Sub "https://${SinatraAPI}.execute-api.${AWS::Region}.amazonaws.com/Prod/"

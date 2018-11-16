@@ -1,0 +1,21 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # Upgrade AWS CLI to the latest version
+      - pip install --upgrade awscli
+
+      # Install Ruby dependencies from the Gemfile.
+      - bundle install --deployment
+
+  build:
+    commands:
+      # Run the tests using RSpec.
+      - rspec
+
+      - aws cloudformation package --template template.yaml --s3-bucket $S3_BUCKET --output-template-file template-export.yaml
+artifacts:
+  type: zip
+  files:
+    - template-export.yaml
