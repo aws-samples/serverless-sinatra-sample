@@ -19,14 +19,8 @@ This sample includes:
 Getting Started
 ---------------
 
-These directions assume you want to develop on your local computer, and not
-from the Amazon EC2 instance itself. If you're on the Amazon EC2 instance, the
-virtual environment is already set up for you, and you can start working on the
-code.
-
 To work on the sample code, you'll need to clone your project's repository to your
-local computer. If you haven't, do that first. You can find instructions in the
-AWS CodeStar user guide.
+local computer. If you haven't, do that first. 
 
 1. Install bundle
 
