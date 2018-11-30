@@ -27,7 +27,7 @@ To work on the sample code, you'll need to clone your project's repository to yo
 
 1. Install bundle
 
-        $ gem install bundle
+        $ gem install bundler
 
 2. Install Ruby dependencies for this service
 
