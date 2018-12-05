@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-set :environment, :test
-
 # Tests for server.rb
 describe 'HelloWorld Service' do
   include Rack::Test::Methods
@@ -36,7 +34,7 @@ describe 'HelloWorld Service' do
         :table_name=>"FeedbackServerlessSinatraTable"})
       .and_call_original
 
-    post '/api/feedback', name: "Tomas", feedback: "AWS Lambda + Ruby == <3"
+    api_gateway_post('/api/feedback', { name: "Tomas", feedback: "AWS Lambda + Ruby == <3" })
 
     expect(last_response).to be_ok
   end

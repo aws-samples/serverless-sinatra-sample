@@ -1,6 +1,14 @@
 require 'sinatra'
 require 'aws-record'
 
+before do
+  if request.body.size > 0
+    request.body.rewind
+    @params = Sinatra::IndifferentHash.new
+    @params.merge!(JSON.parse(request.body.read))
+  end
+end
+
 ##################################
 # For the index page
 ##################################
@@ -44,7 +52,7 @@ get '/api/feedback' do
   ret = []
   items = FeedbackServerlessSinatraTable.scan()
   items.each do |r|
-    item = { :ts => r.ts, :data => r.data }
+    item = { :ts => r.ts, :name => r.name, :feedback => r.feedback }
     ret.push(item)
   end
   ret.sort { |a, b| a[:ts] <=> b[:ts] }.to_json
@@ -52,6 +60,7 @@ end
 
 post '/api/feedback' do
   content_type :json
+
   item = FeedbackServerlessSinatraTable.new(id: SecureRandom.uuid, ts: Time.now)
   item.name = params[:name]
   item.feedback = params[:feedback]
