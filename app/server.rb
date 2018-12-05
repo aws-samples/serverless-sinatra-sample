@@ -30,7 +30,8 @@ end
 class FeedbackServerlessSinatraTable
   include Aws::Record
   string_attr :id, hash_key: true
-  string_attr :data
+  string_attr :name
+  string_attr :feedback
   epoch_time_attr :ts
 end
 
@@ -51,8 +52,10 @@ end
 
 post '/api/feedback' do
   content_type :json
-  body = env["rack.input"].gets
-  item = FeedbackServerlessSinatraTable.new(id: SecureRandom.uuid, ts: Time.now, data: body)
+  item = FeedbackServerlessSinatraTable.new(id: SecureRandom.uuid, ts: Time.now)
+  item.name = params[:name]
+  item.feedback = params[:feedback]
   item.save! # raise an exception if save fails
+
   item.to_json
 end
