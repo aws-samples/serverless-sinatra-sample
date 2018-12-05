@@ -29,3 +29,7 @@ def api_gateway_post(path, params)
 
   post path, real_params = {}, {"rack.input" => rack_input}
 end
+
+def json_result
+  JSON.parse(last_response.body)
+end

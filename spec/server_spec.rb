@@ -16,11 +16,10 @@ describe 'HelloWorld Service' do
   it "should return successfully on POST" do
     post '/hello-world'
     expect(last_response).to be_ok
-    json_result = JSON.parse(last_response.body)
     expect(json_result["Output"]).to eq("Hello World!")
   end
 
-  it "should POST params to feedback endpoint with success" do
+  it "should POST params to API feedback endpoint with success" do
     expect(stub_client)
       .to receive(:put_item)
       .with({
@@ -37,5 +36,21 @@ describe 'HelloWorld Service' do
     api_gateway_post('/api/feedback', { name: "Tomas", feedback: "AWS Lambda + Ruby == <3" })
 
     expect(last_response).to be_ok
+  end
+
+  it "should successfuly GET items from API feedback endpoint in right order" do
+    stub_client.stub_responses(:scan, :items => [
+      {'name' => 'Zdenka', "ts" => 2345678, "feedback" => "Halestorm"},
+      {'name' => 'Tomas',  "ts" => 1234567, "feedback" => "Trivium"},
+      {'name' => 'xiangshen', "ts" => 5678901, "feedback" => "Awesome !"},
+    ])
+
+    get '/api/feedback'
+    expect(last_response).to be_ok
+    expect(json_result).to match_array([
+      { "name" => "Tomas",    "feedback"=>"Trivium",   "ts"=> be_kind_of(String)},
+      { "name" => "Zdenka",   "feedback"=>"Halestorm", "ts"=> be_kind_of(String)},
+      { "name" => "xiangshen","feedback"=>"Awesome !", "ts"=> be_kind_of(String)}
+    ])
   end
 end
