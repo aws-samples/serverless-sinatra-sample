@@ -54,12 +54,11 @@
         });
       });
     }
-    function insertListItem(i) {
-      let data = JSON.parse(i.data);
+    function insertListItem(data) {
       let newItem = '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">' +
     	  '<div class="d-flex w-100 justify-content-between">' +
           '<h5 class="mb-1" style="margin:0 auto;">Name: ' + data.name + '</h5>' + 
-          '<small>Time: ' + i.ts + '</small>' +
+          '<small>Time: ' + data.ts + '</small>' +
           '</div>' +
           '<p class="mb-1">Feedback: ' + data.feedback + '</p></a>';
       $("#lists").prepend(newItem);

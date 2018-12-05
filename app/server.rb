@@ -49,18 +49,15 @@ end
 
 get '/api/feedback' do
   content_type :json
-  ret = []
   items = FeedbackServerlessSinatraTable.scan()
-  items.each do |r|
-    item = { :ts => r.ts, :name => r.name, :feedback => r.feedback }
-    ret.push(item)
-  end
-  ret.sort { |a, b| a[:ts] <=> b[:ts] }.to_json
+  items
+    .map { |r| { :ts => r.ts, :name => r.name, :feedback => r.feedback } }
+    .sort { |a, b| a[:ts] <=> b[:ts] }
+    .to_json
 end
 
 post '/api/feedback' do
   content_type :json
-
   item = FeedbackServerlessSinatraTable.new(id: SecureRandom.uuid, ts: Time.now)
   item.name = params[:name]
   item.feedback = params[:feedback]
