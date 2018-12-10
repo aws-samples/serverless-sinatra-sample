@@ -2,6 +2,8 @@
 
 This sample code helps get you started with a simple Sinatra web app deployed on AWS Lambda. It is tested with Ruby 2.5.x. 
 
+Additional details can be found at: https://aws.amazon.com/blogs/compute/announcing-ruby-support-for-aws-lambda/
+
 What's Here
 -----------
 
