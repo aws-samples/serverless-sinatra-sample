@@ -36,8 +36,8 @@ def handler(event:, context:)
     "rack.errors" => $stderr,
   }
   # Pass request headers to Rack if they are available
-  unless event['header'].nil?
-    event['headers'].each{ |key, value| env[key] = "HTTP_#{value}" }
+  unless event['headers'].nil?
+    event['headers'].each{ |key, value| env["HTTP_#{key}"] = value }
   end
   
   begin
