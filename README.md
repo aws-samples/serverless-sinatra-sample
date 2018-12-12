@@ -4,6 +4,12 @@ This sample code helps get you started with a simple Sinatra web app deployed on
 
 Additional details can be found at: https://aws.amazon.com/blogs/compute/announcing-ruby-support-for-aws-lambda/
 
+__Other resources:__
+
+Ruby Sinatra on AWS Lambda: https://blog.eq8.eu/article/sinatra-on-aws-lambda.html
+
+We want FaaS for Ruby: https://www.serverless-ruby.org/
+
 What's Here
 -----------
 
@@ -67,6 +73,11 @@ To work on the sample code, you'll need to clone your project's repository to yo
             --stack-name { your-stack-name } \
             --capabilities CAPABILITY_IAM
 
+6. Once the deployment is complete, you can find the application endpoint from the CloudFormation outputs tab. Alternatively, you can find it under the Stages link from the API gateway console.
+
+__Note__:
+You can also use an [Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/features/#Details_for_Elastic_Load_Balancing_Products) instead of API gateway. 
+For details, please visit https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html
 
 What Do I Do Next?
 ------------------
