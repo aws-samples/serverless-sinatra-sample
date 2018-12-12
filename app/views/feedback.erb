@@ -25,7 +25,7 @@
         fdata["feedback"] = $("#feedback").val();
         $.ajax({
             cache: false,
-            url : "/Prod/api/feedback",
+            url : "api/feedback",
             type: "POST",
             dataType : "json",
             data : JSON.stringify(fdata),
@@ -46,7 +46,7 @@
     
     function getAllItems() {
       $.ajax({
-        url: "/Prod/api/feedback"
+        url: "api/feedback"
       })
       .done(function(json) {
     	  $.each(json, function(i) {
@@ -74,7 +74,7 @@
         <h3>Hope you enjoying programming with AWS Lambda! Please share your feedback or any random thoughts.</h3>
     </div>
 
-    <form action="/Prod/feedback" method="post" id="feedbackForm">
+    <form action="feedback" method="post" id="feedbackForm">
       <div class="form-group">
         <label for="name">Name:</label>
         <input class="form-control" id="name">

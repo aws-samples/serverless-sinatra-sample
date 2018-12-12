@@ -63,5 +63,5 @@ post '/api/feedback' do
   item.feedback = params[:feedback]
   item.save! # raise an exception if save fails
 
-  item.to_json
+  item.to_h.to_json
 end

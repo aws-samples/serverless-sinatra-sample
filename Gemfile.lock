@@ -39,6 +39,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
+    rubysl-base64 (2.0.0)
     sinatra (2.0.4)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -57,7 +58,8 @@ DEPENDENCIES
   rack-test
   rake
   rspec
+  rubysl-base64
   sinatra
 
 BUNDLED WITH
-   1.16.6
+   1.17.2
