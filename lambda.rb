@@ -29,7 +29,8 @@ def handler(event:, context:)
     "QUERY_STRING" => event['queryStringParameters'] || "",
     "SERVER_NAME" => "localhost",
     "SERVER_PORT" => 443,
-    
+    "CONTENT_TYPE" => event['headers']['content-type'],
+
     "rack.version" => Rack::VERSION,
     "rack.url_scheme" => "https",
     "rack.input" => StringIO.new(event['body'] || ""),
@@ -54,6 +55,7 @@ def handler(event:, context:)
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     response = {
       "statusCode" => status,
+      "isBase64Encoded" => false,
       "headers" => headers,
       "body" => body_content
     }
