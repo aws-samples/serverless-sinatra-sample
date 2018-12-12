@@ -15,12 +15,19 @@
 
 require 'json'
 require 'rack'
+require 'base64'
 
 # Global object that responds to the call method. Stay outside of the handler
 # to take advantage of container reuse
 $app ||= Rack::Builder.parse_file("#{File.dirname(__FILE__)}/app/config.ru").first
 
 def handler(event:, context:)
+  # Check if the body is base64 encoded. If it is, try to decode it
+  if event["isBase64Encoded"]
+    body = Base64.decode64(event['body'])
+  else
+    body = event['body']
+  end
   # Environment required by Rack (http://www.rubydoc.info/github/rack/rack/file/SPEC)
   env = {
     "REQUEST_METHOD" => event['httpMethod'],
@@ -30,17 +37,17 @@ def handler(event:, context:)
     "SERVER_NAME" => "localhost",
     "SERVER_PORT" => 443,
     "CONTENT_TYPE" => event['headers']['content-type'],
-
+    
     "rack.version" => Rack::VERSION,
     "rack.url_scheme" => "https",
-    "rack.input" => StringIO.new(event['body'] || ""),
+    "rack.input" => StringIO.new(body || ""),
     "rack.errors" => $stderr,
   }
   # Pass request headers to Rack if they are available
   unless event['headers'].nil?
     event['headers'].each{ |key, value| env["HTTP_#{key}"] = value }
   end
-  
+
   begin
     # Response from Rack must have status, headers and body
     status, headers, body = $app.call(env)
@@ -55,10 +62,13 @@ def handler(event:, context:)
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     response = {
       "statusCode" => status,
-      "isBase64Encoded" => false,
       "headers" => headers,
       "body" => body_content
     }
+    if event["requestContext"].has_key?("elb")
+      # Required if we use application load balancer instead of API GW
+      response["isBase64Encoded"] = false
+    end
   rescue Exception => msg
     # If there is any exception, we return a 500 error with an error message
     response = {
