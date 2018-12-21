@@ -1,11 +1,11 @@
 # MIT No Attribution
- 
+
 # Permission is hereby granted, free of charge, to any person obtaining a copy of this
 # software and associated documentation files (the "Software"), to deal in the Software
 # without restriction, including without limitation the rights to use, copy, modify,
 # merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
 # permit persons to whom the Software is furnished to do so.
- 
+
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
 # INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
 # PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
@@ -28,16 +28,18 @@ def handler(event:, context:)
   else
     body = event['body']
   end
+  # Rack expects the querystring in plain text, not a hash
+  querystring = Rack::Utils.build_query(event['queryStringParameters']) if event['queryStringParameters']
   # Environment required by Rack (http://www.rubydoc.info/github/rack/rack/file/SPEC)
   env = {
     "REQUEST_METHOD" => event['httpMethod'],
     "SCRIPT_NAME" => "",
     "PATH_INFO" => event['path'] || "",
-    "QUERY_STRING" => event['queryStringParameters'] || "",
+    "QUERY_STRING" => querystring || "",
     "SERVER_NAME" => "localhost",
     "SERVER_PORT" => 443,
     "CONTENT_TYPE" => event['headers']['content-type'],
-    
+
     "rack.version" => Rack::VERSION,
     "rack.url_scheme" => "https",
     "rack.input" => StringIO.new(body || ""),
@@ -57,7 +59,7 @@ def handler(event:, context:)
     body.each do |item|
       body_content += item.to_s
     end
-  
+
     # We return the structure required by AWS API Gateway since we integrate with it
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     response = {
