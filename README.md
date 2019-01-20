@@ -1,6 +1,6 @@
 ## Running Ruby Sinatra on AWS Lambda
 
-This sample code helps get you started with a simple Sinatra web app deployed on AWS Lambda. It is tested with Ruby 2.5.x. 
+This sample code helps get you started with a simple Sinatra web app deployed on AWS Lambda. It is tested with Ruby 2.5.x and bundler-1.17.x. 
 
 Additional details can be found at: https://aws.amazon.com/blogs/compute/announcing-ruby-support-for-aws-lambda/
 
@@ -33,19 +33,21 @@ These directions assume you already have Ruby 2.5.x and [AWS CLI](https://docs.a
 
 To work on the sample code, you'll need to clone your project's repository to your local computer. If you haven't, do that first. You can find a guide [here](https://help.github.com/articles/cloning-a-repository/).
 
-1. Install bundle
+1. Ensure you are using ruby version 2.5.x
 
-        $ gem install bundler
+2. Install bundle
 
-2. Install Ruby dependencies for this service
+        $ gem install bundler -v "~> 1.17"
+
+3. Install Ruby dependencies for this service
 
         $ bundle install
 
-3. Download the Gems to the local vendor directory
+4. Download the Gems to the local vendor directory
 
         $ bundle install --deployment
 
-4. Create the deployment package (note: if you don't have a S3 bucket, you need to create one):
+5. Create the deployment package (note: if you don't have a S3 bucket, you need to create one):
 
         $ aws cloudformation package \
             --template-file template.yaml \
@@ -60,7 +62,7 @@ To work on the sample code, you'll need to clone your project's repository to yo
             --output-template-file serverless-output.yaml \
             --s3-bucket { your-bucket-name }
             
-5. Deploying your application
+6. Deploying your application
 
         $ aws cloudformation deploy --template-file serverless-output.yaml \
             --stack-name { your-stack-name } \
@@ -73,7 +75,7 @@ To work on the sample code, you'll need to clone your project's repository to yo
             --stack-name { your-stack-name } \
             --capabilities CAPABILITY_IAM
 
-6. Once the deployment is complete, you can find the application endpoint from the CloudFormation outputs tab. Alternatively, you can find it under the Stages link from the API gateway console.
+7. Once the deployment is complete, you can find the application endpoint from the CloudFormation outputs tab. Alternatively, you can find it under the Stages link from the API gateway console.
 
 __Note__:
 You can also use an [Application Load Balancer](https://aws.amazon.com/elasticloadbalancing/features/#Details_for_Elastic_Load_Balancing_Products) instead of API gateway. 
