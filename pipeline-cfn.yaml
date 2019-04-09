@@ -32,8 +32,8 @@ Parameters:
     ConstraintDescription: You must enter a GitHub username or organization
   CodeBuildImage:
     Type: String
-    Default: aws/codebuild/ruby:2.5.1
-    Description: Default AWS CodeBuild Ruby 2.5.1 image
+    Default: aws/codebuild/ruby:2.5.3
+    Description: Default AWS CodeBuild Ruby 2.5.3 image
     MinLength: 3
     MaxLength: 100
     ConstraintDescription: You must enter a CodeBuild image
