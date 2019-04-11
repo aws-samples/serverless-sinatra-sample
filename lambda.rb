@@ -60,12 +60,15 @@ def handler(event:, context:)
     body.each do |item|
       body_content += item.to_s
     end
+    
+    # Setup headers to accomodate mutliValueHeaders
+    headers.each { |k, v| headers[k] = headers[k] = v.split("\n") }
 
     # We return the structure required by AWS API Gateway since we integrate with it
     # https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     response = {
       'statusCode' => status,
-      'headers' => headers,
+      'multiValueHeaders' => headers,
       'body' => body_content
     }
     if event['requestContext'].key?('elb')

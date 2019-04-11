@@ -1,2 +1,5 @@
 .ruby-gemset
 .ruby-version
+/.bundle/
+/vendor/bundle/
+serverless-output.yaml

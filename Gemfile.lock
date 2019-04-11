@@ -1,6 +1,11 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    activesupport (5.2.3)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
     aws-eventstream (1.0.1)
     aws-partitions (1.139.0)
     aws-record (2.3.0)
@@ -14,9 +19,15 @@ GEM
       aws-sdk-core (~> 3, >= 3.39.0)
       aws-sigv4 (~> 1.0)
     aws-sigv4 (1.0.3)
+    backports (3.13.0)
+    concurrent-ruby (1.1.5)
     diff-lcs (1.3)
+    i18n (1.6.0)
+      concurrent-ruby (~> 1.0)
     jmespath (1.4.0)
     json (2.1.0)
+    minitest (5.11.3)
+    multi_json (1.13.1)
     mustermann (1.0.3)
     rack (2.0.6)
     rack-contrib (2.1.0)
@@ -45,7 +56,18 @@ GEM
       rack (~> 2.0)
       rack-protection (= 2.0.4)
       tilt (~> 2.0)
+    sinatra-contrib (2.0.4)
+      activesupport (>= 4.0.0)
+      backports (>= 2.8.2)
+      multi_json
+      mustermann (~> 1.0)
+      rack-protection (= 2.0.4)
+      sinatra (= 2.0.4)
+      tilt (>= 1.3, < 3)
+    thread_safe (0.3.6)
     tilt (2.0.8)
+    tzinfo (1.2.5)
+      thread_safe (~> 0.1)
 
 PLATFORMS
   ruby
@@ -60,6 +82,7 @@ DEPENDENCIES
   rspec
   rubysl-base64
   sinatra
+  sinatra-contrib
 
 BUNDLED WITH
    1.17.3

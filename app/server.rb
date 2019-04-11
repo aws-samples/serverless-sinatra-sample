@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/cookies'
 require 'aws-record'
 
 before do
@@ -27,6 +28,15 @@ end
 post '/hello-world' do
     content_type :json
     { :Output => 'Hello World!' }.to_json
+end
+
+##################################
+# Cookies example
+##################################
+get '/cookies' do
+  cookies[:TestCookie1] = "TestCookie1 Value"
+  cookies[:TestCookie2] = "TestCookie2 Value"
+  erb :cookies
 end
 
 ##################################

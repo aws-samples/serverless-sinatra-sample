@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'pp'
 
 # Tests for server.rb
 describe 'HelloWorld Service' do
@@ -10,6 +11,14 @@ describe 'HelloWorld Service' do
     expect(last_response).to be_ok
     json_result = JSON.parse(last_response.body)
     expect(json_result["Output"]).to eq("Hello World!")
+  end
+  
+  # Test for cookies in HTTP response 
+  it "should return cookies in HTTP response" do
+    cookies = "TestCookie1=TestCookie1+Value; domain=example.org; path=/; HttpOnly\nTestCookie2=TestCookie2+Value; domain=example.org; path=/; HttpOnly"
+    get '/cookies'
+    expect(last_response).to be_ok
+    expect(last_response.headers['Set-Cookie']).to eq(cookies)
   end
 
   # Test for HTTP POST for URL-matching pattern '/'
