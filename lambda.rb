@@ -23,7 +23,7 @@ $app ||= Rack::Builder.parse_file("#{__dir__}/app/config.ru").first
 ENV['RACK_ENV'] ||= 'production'
 
 
-def lambda_handler(event:, context:)
+def handler(event:, context:)
   # Check if the body is base64 encoded. If it is, try to decode it
   body = if event['isBase64Encoded']
     Base64.decode64 event['body']
