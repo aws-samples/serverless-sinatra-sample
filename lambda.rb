@@ -39,7 +39,7 @@ def handler(event:, context:)
     'REQUEST_METHOD' => event.fetch('httpMethod'),
     'SCRIPT_NAME' => '',
     'PATH_INFO' => event.fetch('path', ''),
-    'QUERY_STRING' => Rack::Utils.build_query(event['queryStringParameters'] || {}),
+    'QUERY_STRING' => (event['queryStringParameters'] || {}).map { |k,v| "#{k}=#{v}" }.join('&'),
     'SERVER_NAME' => headers.fetch('Host', 'localhost'),
     'SERVER_PORT' => headers.fetch('X-Forwarded-Port', 443).to_s,
 
